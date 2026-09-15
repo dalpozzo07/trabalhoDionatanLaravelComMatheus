@@ -16,11 +16,19 @@ class ProductController extends Controller
 
     public function create()
     {
+        if (auth()->user()->role !== 'admin') {
+            abort(403);
+        }
+
         return view('products.create');
     }
 
     public function store(Request $request)
     {
+        if (auth()->user()->role !== 'admin') {
+            abort(403);
+        }
+
         $dados = $request->validate([
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
@@ -46,11 +54,19 @@ class ProductController extends Controller
 
     public function edit(Product $product)
     {
+        if (auth()->user()->role !== 'admin') {
+            abort(403);
+        }
+
         return view('products.edit', compact('product'));
     }
 
     public function update(Request $request, Product $product)
     {
+        if (auth()->user()->role !== 'admin') {
+            abort(403);
+        }
+
         $dados = $request->validate([
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
@@ -71,6 +87,10 @@ class ProductController extends Controller
 
     public function destroy(Product $product)
     {
+        if (auth()->user()->role !== 'admin') {
+            abort(403);
+        }
+
         $product->delete();
 
         return redirect()
