@@ -2,63 +2,72 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\OrderItem;
 use Illuminate\Http\Request;
 
 class OrderItemController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        //
+        $items = OrderItem::with(['order', 'product'])->get();
+
+        return view('order_items.index', compact('items'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
-        //
+        return view('order_items.create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'order_id' => 'required|exists:orders,id',
+            'product_id' => 'required|exists:products,id',
+            'quantity' => 'required|integer|min:1',
+            'unit_price' => 'required|numeric|min:0',
+        ]);
+
+        OrderItem::create($request->all());
+
+        return redirect()
+            ->route('order-items.index')
+            ->with('sucesso', 'Item adicionado ao pedido!');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
+    public function show(OrderItem $orderItem)
     {
-        //
+        $orderItem->load(['order', 'product']);
+
+        return view('order_items.show', compact('orderItem'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
+    public function edit(OrderItem $orderItem)
     {
-        //
+        return view('order_items.edit', compact('orderItem'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
+    public function update(Request $request, OrderItem $orderItem)
     {
-        //
+        $request->validate([
+            'quantity' => 'required|integer|min:1',
+        ]);
+
+        $orderItem->update([
+            'quantity' => $request->quantity,
+        ]);
+
+        return redirect()
+            ->route('order-items.index')
+            ->with('sucesso', 'Item atualizado com sucesso!');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
+    public function destroy(OrderItem $orderItem)
     {
-        //
+        $orderItem->delete();
+
+        return redirect()
+            ->route('order-items.index')
+            ->with('sucesso', 'Item removido do pedido!');
     }
 }
