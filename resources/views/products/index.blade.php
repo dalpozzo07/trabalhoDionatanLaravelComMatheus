@@ -47,17 +47,19 @@
                                 Ver
                             </a>
 
-                            @if(auth()->user()->role === 'admin')
+                            @if(in_array(auth()->user()->role, ['admin', 'gerente']))
                                 |
                                 <a href="{{ route('products.edit', $product) }}">
                                     Editar
                                 </a>
+                            @endif
 
+                            @if(auth()->user()->role === 'admin')
                                 |
 
                                 <form action="{{ route('products.destroy', $product) }}"
-                                      method="POST"
-                                      style="display:inline;">
+                                    method="POST"
+                                    style="display:inline;">
                                     @csrf
                                     @method('DELETE')
 

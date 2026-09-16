@@ -48,7 +48,7 @@ class ProductController extends Controller
 
     public function edit(Product $product)
     {
-        if (auth()->user()->role !== 'admin') {
+        if (!in_array(auth()->user()->role, ['admin', 'gerente'])) {
             abort(403);
         }
 
@@ -57,7 +57,7 @@ class ProductController extends Controller
 
     public function update(Request $request, Product $product)
     {
-        if (auth()->user()->role !== 'admin') {
+        if (!in_array(auth()->user()->role, ['admin', 'gerente'])) {
             abort(403);
         }
 
