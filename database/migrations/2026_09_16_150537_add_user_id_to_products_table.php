@@ -11,15 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('carts', function (Blueprint $table) {
-            $table->id();
-            $table->timestamps();
-
-        // o unique vai garantir que cada usuário tenha apenas um carrinho
-            $table->foreignId('user_id')
-        ->unique()
-        ->constrained()
-        ->cascadeOnDelete();
+        Schema::table('products', function (Blueprint $table) {
+            //
         });
     }
 
@@ -28,6 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('carts');
+        Schema::table('products', function (Blueprint $table) {
+            //
+        });
     }
 };
