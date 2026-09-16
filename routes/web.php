@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\UserController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -20,9 +21,15 @@ Route::get('/dashboard', function () {
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
+    Route::get('/profile', [ProfileController::class, 'edit'])
+        ->name('profile.edit');
+
+    Route::patch('/profile', [ProfileController::class, 'update'])
+        ->name('profile.update');
+
+    Route::delete('/profile', [ProfileController::class, 'destroy'])
+        ->name('profile.destroy');
 });
 
 Route::middleware('auth')->group(function () {
@@ -31,6 +38,7 @@ Route::middleware('auth')->group(function () {
         ->only(['index', 'show']);
 
     Route::middleware('admin')->group(function () {
+
         Route::get('/products/create', [ProductController::class, 'create'])
             ->name('products.create');
 
@@ -42,11 +50,24 @@ Route::middleware('auth')->group(function () {
     });
 
     Route::middleware('manager')->group(function () {
+
         Route::get('/products/{product}/edit', [ProductController::class, 'edit'])
             ->name('products.edit');
 
         Route::put('/products/{product}', [ProductController::class, 'update'])
             ->name('products.update');
+    });
+
+    Route::middleware('admin')->group(function () {
+
+        Route::get('/users', [UserController::class, 'index'])
+            ->name('users.index');
+
+        Route::get('/users/{user}/edit', [UserController::class, 'edit'])
+            ->name('users.edit');
+
+        Route::put('/users/{user}', [UserController::class, 'update'])
+            ->name('users.update');
     });
 });
 
