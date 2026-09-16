@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreProductRequest;
 use App\Models\Product;
 use Illuminate\Http\Request;
 
@@ -23,20 +24,13 @@ class ProductController extends Controller
         return view('products.create');
     }
 
-    public function store(Request $request)
+    public function store(StoreProductRequest $request)
     {
         if (auth()->user()->role !== 'admin') {
             abort(403);
         }
 
-        $dados = $request->validate([
-            'name' => 'required|string|max:255',
-            'description' => 'nullable|string',
-            'price' => 'required|numeric|min:0',
-            'stock' => 'required|integer|min:0',
-            'image' => 'nullable|string',
-            'active' => 'nullable|boolean',
-        ]);
+        $dados = $request->validated();
 
         $dados['active'] = $request->boolean('active');
 
@@ -54,18 +48,14 @@ class ProductController extends Controller
 
     public function edit(Product $product)
     {
-        if (auth()->user()->role !== 'admin') {
-            abort(403);
-        }
+        $this->authorize('update', $product);
 
         return view('products.edit', compact('product'));
     }
 
     public function update(Request $request, Product $product)
     {
-        if (auth()->user()->role !== 'admin') {
-            abort(403);
-        }
+        $this->authorize('update', $product);
 
         $dados = $request->validate([
             'name' => 'required|string|max:255',
@@ -87,9 +77,7 @@ class ProductController extends Controller
 
     public function destroy(Product $product)
     {
-        if (auth()->user()->role !== 'admin') {
-            abort(403);
-        }
+        $this->authorize('delete', $product);
 
         $product->delete();
 
