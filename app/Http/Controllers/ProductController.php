@@ -32,7 +32,7 @@ class ProductController extends Controller
 
         $dados = $request->validated();
 
-        $dados['active'] = $request->boolean('active');
+        $dados['is_active'] = $request->boolean('is_active');
 
         Product::create($dados);
 
@@ -48,25 +48,28 @@ class ProductController extends Controller
 
     public function edit(Product $product)
     {
-        $this->authorize('update', $product);
+        if (auth()->user()->role !== 'admin') {
+            abort(403);
+        }
 
         return view('products.edit', compact('product'));
     }
 
     public function update(Request $request, Product $product)
     {
-        $this->authorize('update', $product);
+        if (auth()->user()->role !== 'admin') {
+            abort(403);
+        }
 
         $dados = $request->validate([
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
             'price' => 'required|numeric|min:0',
             'stock' => 'required|integer|min:0',
-            'image' => 'nullable|string',
-            'active' => 'nullable|boolean',
+            'is_active' => 'nullable|boolean',
         ]);
 
-        $dados['active'] = $request->boolean('active');
+        $dados['is_active'] = $request->boolean('is_active');
 
         $product->update($dados);
 
@@ -77,7 +80,9 @@ class ProductController extends Controller
 
     public function destroy(Product $product)
     {
-        $this->authorize('delete', $product);
+        if (auth()->user()->role !== 'admin') {
+            abort(403);
+        }
 
         $product->delete();
 

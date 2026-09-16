@@ -26,8 +26,6 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::middleware('auth')->group(function () {
-    Route::resource('products', ProductController::class)
-        ->except(['create', 'store', 'edit', 'update', 'destroy']);
 
     Route::middleware('admin')->group(function () {
         Route::get('/products/create', [ProductController::class, 'create'])
@@ -45,6 +43,9 @@ Route::middleware('auth')->group(function () {
         Route::delete('/products/{product}', [ProductController::class, 'destroy'])
             ->name('products.destroy');
     });
+
+    Route::resource('products', ProductController::class)
+        ->only(['index', 'show']);
 });
 
 require __DIR__.'/auth.php';
