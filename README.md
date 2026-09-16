@@ -582,11 +582,11 @@ Os seguintes usuários são criados pelos Seeders:
 | **Gerente** | `gerente@email.com` | `12345G` |
 | **Cliente** | `cliente@email.com` | `12345C` |
 
-### Sugestão para demonstração
+### Sugestão para testes
 
 **Administrador**
 
-Demonstre:
+Teste:
 
 - Login;
 - Listagem de produtos;
@@ -598,7 +598,7 @@ Demonstre:
 
 **Gerente**
 
-Demonstre:
+Teste:
 
 - Login;
 - Visualização de produtos;
@@ -607,49 +607,11 @@ Demonstre:
 
 **Cliente**
 
-Demonstre:
+Teste:
 
 - Login;
 - Visualização de produtos;
 - Bloqueio de ações administrativas/de edição.
-
----
-
-#  Demonstração dos requisitos
-
-Durante a apresentação do projeto, pode ser seguido este roteiro:
-
-### 1. Autenticação
-
-Entrar com os três usuários de teste e demonstrar login/logout.
-
-### 2. Controle de acesso
-
-Mostrar como a interface e o backend mudam conforme o papel do usuário.
-
-### 3. CRUD
-
-Cadastrar um produto, visualizar, editar e excluir.
-
-### 4. Relacionamento
-
-Demonstrar que o produto possui `user_id` e que o relacionamento Eloquent conecta produto e usuário.
-
-### 5. Validação
-
-Tentar cadastrar um produto inválido, por exemplo, sem nome ou com preço negativo, e apresentar os erros do `StoreProductRequest`.
-
-### 6. Policy
-
-Entrar como gerente e tentar excluir um produto ou entrar como cliente e tentar editar. O backend deve bloquear a ação através da `ProductPolicy`.
-
-### 7. Banco de dados
-
-Mostrar as migrations, a tabela `products`, o campo `user_id`, a chave estrangeira e o comando:
-
-```bash
-php artisan migrate:fresh --seed
-```
 
 ---
 
